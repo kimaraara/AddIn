@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="AddIn.Views.NewWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AddIn.Views" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             Height="800" Width="1000">
+
+    <Viewbox Stretch="Uniform">
+        <Grid Background="#FFFDFFE7" Height="419" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.945">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+
+            
+            <TextBlock 
+                    Grid.Row="2" Text="서브 기능" FontSize="18" Margin="160,24,0,0" Background="LightGoldenrodYellow"
+                    VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"  Height="30" Grid.ColumnSpan="2" />
+
+            
+            <Button x:Name="btnMainFunction" Click="btnMainFunction_Click" 
+                    FontSize="30" FontWeight="Heavy"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    Height="91" Width="183" Background="#FFFFFDA2" Margin="109,80,0,0" Grid.ColumnSpan="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text=" 시작" Margin="0 5 15 20"/>
+                    <fa:ImageAwesome x:Name="icoStartMenu" Icon="HandPointerOutline" 
+                                     Width="25" Height="25" VerticalAlignment="Center" Margin="0 50 0 10" />
+                    
+                </Grid>
+            </Button>
+
+            <Button Content="부품 분리" x:Name="btnPartSeparate" Click="btnPartSeparate_Click"
+                    HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    Height="58" Width="124" Background="#FFFFFDA2" Grid.Row="1" Margin="0,70,0,0" />
+
+            <Button Grid.Column="1" Content="부품 이름 변경" x:Name="btnPartNameChange" Click="btnPartNameChange_Click"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" 
+                    Height="58" Width="123" Background="#FFFFFDA2" Margin="36,70,0,0" Grid.Row="1" />
+
+
+
+        </Grid>
+    </Viewbox>
+</UserControl>

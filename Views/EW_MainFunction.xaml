@@ -1,0 +1,68 @@
+﻿<Window x:Class="AddIn.Views.EW_MainFunction"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AddIn.Views"
+        
+            xmlns:vm="clr-namespace:AddIn.ViewModels"
+        
+             mc:Ignorable="d" 
+             Height="450" Width="800">
+
+    <Window.DataContext>
+        <vm:VM_MainFunction/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Content="파일명"/>
+                <Label Content="{Binding FileName}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <Button Margin="5" x:Name="btnRefresh" Width="50" Command="{Binding RefreshCommand}" Content="새로고침"/>
+            </StackPanel>
+        </Grid>
+
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="사용자 속성"/>
+            <DataGrid x:Name="dgdCustomProperties" Grid.Row="1" Margin="5" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding CustomProperties}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="설정 속성"/>
+            <DataGrid x:Name="dgdConfigurationProperties" Grid.Row="1" Margin="5" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding ConfigurationProperties}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Grid>
+</Window>
