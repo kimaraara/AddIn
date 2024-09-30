@@ -8,5 +8,7 @@ namespace AddIn.ViewModels
 {
     internal class Test
     {
+
+        //테스트 주석
     }
 }
