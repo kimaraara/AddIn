@@ -16,8 +16,12 @@ namespace AddIn.ViewModels
     public class VM_MainFunction : INotifyPropertyChanged
     {
         // 데이터 영역
-        private string _fileName; // 클래스 내부에서만 접근이 가능, 데이터가 실제로 저장되는 공간의 역할
-        public string FileName // _fileName을 UI에 노출시키고 어떠한 사유로 
+        // _fileName : 클래스 내부에서만 접근이 가능, 데이터가 실제로 저장되는 공간의 역할 (데이터 보관)
+        private string _fileName; 
+
+        // _fileName을 UI에 노출시키고 어떠한 사유로든 값이 변경 되었을 때, 업데이트 하는 역할 (데이터 변경 사실 알림)
+        // 프로그램 내부(백엔드)와 외부(프론트엔드)에서 사용할 각각의 값
+        public string FileName 
         {
             get { return _fileName; }
             set { _fileName = value; OnPropertyChanged(); }
