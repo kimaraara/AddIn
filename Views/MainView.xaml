@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AddIn.Views"
+             xmlns:vm="clr-namespace:AddIn.ViewModels"
+
             Loaded="Window_Loaded"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
     
+   <Window.DataContext>
+       <vm:VM_MainFunction/>
+   </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
@@ -126,11 +132,18 @@
                 
             </Grid>
             <ScrollViewer Margin="5" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+             
                 <DataGrid x:Name="ExcelGrid" 
-                          AutoGenerateColumns="False" HeadersVisibility="All" CanUserAddRows="False"
-                          IsReadOnly="False" GridLinesVisibility="All"
-                          RowHeaderWidth="0" AlternatingRowBackground="LightGray"
-                          SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
+                          AutoGenerateColumns="False" 
+                          HeadersVisibility="All" 
+                          CanUserAddRows="False"
+                          IsReadOnly="False" 
+                          GridLinesVisibility="All"
+                          RowHeaderWidth="0" 
+                          AlternatingRowBackground="LightGray"
+                          SelectionMode="Extended" 
+                          SelectionUnit="CellOrRowHeader"
+                          ItemsSource="{Binding CustomProperties}"
                           Margin="5">
                     <DataGrid.Columns>
                         
@@ -142,6 +155,7 @@
                         <DataGridCheckBoxColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
                         -->
 
+                        <!--
                         <DataGridTextColumn HeaderStringFormat="순서" Header="순서" Binding="{Binding Order}" Width="80" />
                         <DataGridTextColumn HeaderStringFormat="레벨" Header="레벨" Binding="{Binding Level}" Width="80" />
                         <DataGridTextColumn HeaderStringFormat="-" Header="-" Binding="{Binding Hyphen}" Width="80" />
@@ -153,7 +167,14 @@
                         <DataGridTextColumn HeaderStringFormat="SPEC" Header="SPEC" Binding="{Binding SPEC}" />
                         <DataGridTextColumn HeaderStringFormat="MATERIAL" Header="MATERIAL" Binding="{Binding MATERIAL}" />
                         <DataGridTextColumn HeaderStringFormat="DESIGNED" Header="DESIGNED" Binding="{Binding DESIGNED}" />
+                        -->
                         
+                        <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>

@@ -27,11 +27,18 @@ namespace AddIn.Views
         }
 
         // 시작 버튼 클릭
-        private void btnMainFunction_Click(object sender, RoutedEventArgs e)
+        private void btnMainView_Click(object sender, RoutedEventArgs e)
         {
-            EW_MainFunction ew_MainFunction = new EW_MainFunction();
-            ew_MainFunction.Show();
+            // EW_MainFunction ew_MainFunction = new EW_MainFunction();
+            // ew_MainFunction.Show();
+
+            MainView mainView = new MainView();
+            mainView.Show();
         }
+
+        // 사용자 정의 라디오 버튼 클릭
+        // 설정 특성 라디오 버튼 클릭
+        // BOM 구조로 불러오기 체크박스 선택
 
         // 부품분리 버튼 클릭
         private void btnPartSeparate_Click(object sender, RoutedEventArgs e)

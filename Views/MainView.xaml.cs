@@ -63,6 +63,7 @@ namespace AddIn.Views
             context4.IsOpen = true;
         }
 
+        
         // 엑셀 화면
         public class Part
         {
@@ -147,7 +148,7 @@ namespace AddIn.Views
             }
             catch (Exception ex) {
                 MessageBox.Show("오류 발생: " + ex.Message);
-            }
+            } 
 
             
         }
