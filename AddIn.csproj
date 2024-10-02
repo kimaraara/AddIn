@@ -145,8 +145,10 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Models\Relay_Command.cs" />
+    <Compile Include="Models\Relay_CommandExcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\VM_MainFunction.cs" />
+    <Compile Include="ViewModels\VM_MainFunctionExcel.cs" />
     <Compile Include="Views\AttrAdd.xaml.cs">
       <DependentUpon>AttrAdd.xaml</DependentUpon>
     </Compile>

@@ -11,7 +11,7 @@
              d:DesignHeight="800" d:DesignWidth="1200">
     
    <Window.DataContext>
-       <vm:VM_MainFunction/>
+       <vm:VM_MainFunctionExcel/>
    </Window.DataContext>
 
     <Grid>
@@ -89,13 +89,13 @@
 
                 <Button Content="엑셀출력" x:Name="btnExcelPrint" Click="btnExcelPrint_Click"
                         Width="100" Background="Ivory">
-                    <!--
+                    
                     <Button.ContextMenu>
                         <ContextMenu Name="context5">
                             <MenuItem Header="" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                    -->
+                    
                 </Button>
             </StackPanel> 
             
@@ -155,8 +155,8 @@
                         <DataGridCheckBoxColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
                         -->
 
-                        <!--
-                        <DataGridTextColumn HeaderStringFormat="순서" Header="순서" Binding="{Binding Order}" Width="80" />
+                        
+                        <DataGridTextColumn HeaderStringFormat="순서" Header="순서" Binding="{Binding Order}" Width="80" /> 
                         <DataGridTextColumn HeaderStringFormat="레벨" Header="레벨" Binding="{Binding Level}" Width="80" />
                         <DataGridTextColumn HeaderStringFormat="-" Header="-" Binding="{Binding Hyphen}" Width="80" />
                         <DataGridTextColumn HeaderStringFormat="부품명" Header="부품명" Binding="{Binding PartName}" Width="80" />
@@ -167,13 +167,13 @@
                         <DataGridTextColumn HeaderStringFormat="SPEC" Header="SPEC" Binding="{Binding SPEC}" />
                         <DataGridTextColumn HeaderStringFormat="MATERIAL" Header="MATERIAL" Binding="{Binding MATERIAL}" />
                         <DataGridTextColumn HeaderStringFormat="DESIGNED" Header="DESIGNED" Binding="{Binding DESIGNED}" />
-                        -->
+                        <DataGridTextColumn HeaderStringFormat="WEIGHT" Header="WEIGHT" Binding="{Binding WEIGHT}" />
+                        <DataGridTextColumn HeaderStringFormat="FINISH/MAKER" Header="FINISH/MAKER" Binding="{Binding FINISHMAKER}" />
+                        <DataGridTextColumn HeaderStringFormat="CHECKED" Header="CHECKED" Binding="{Binding CHECKED}" />
+                        <DataGridTextColumn HeaderStringFormat="APPROVED" Header="APPROVED" Binding="{Binding APPROVED}" />
                         
-                        <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                        
+                        
 
                     </DataGrid.Columns>
                 </DataGrid>
