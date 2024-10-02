@@ -5,14 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AddIn.Views"
              xmlns:vm="clr-namespace:AddIn.ViewModels"
-
-            Loaded="Window_Loaded"
+                       
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
     
    <Window.DataContext>
-       <vm:VM_MainFunctionExcel/>
-   </Window.DataContext>
+        <vm:VM_MainFunctionExcel/>
+    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -87,6 +86,7 @@
                     </Button.ContextMenu>
                 </Button>
 
+                 <!--
                 <Button Content="엑셀출력" x:Name="btnExcelPrint" Click="btnExcelPrint_Click"
                         Width="100" Background="Ivory">
                     
@@ -97,6 +97,7 @@
                     </Button.ContextMenu>
                     
                 </Button>
+                    -->
             </StackPanel> 
             
             
@@ -156,21 +157,21 @@
                         -->
 
                         
-                        <DataGridTextColumn HeaderStringFormat="순서" Header="순서" Binding="{Binding Order}" Width="80" /> 
-                        <DataGridTextColumn HeaderStringFormat="레벨" Header="레벨" Binding="{Binding Level}" Width="80" />
-                        <DataGridTextColumn HeaderStringFormat="-" Header="-" Binding="{Binding Hyphen}" Width="80" />
-                        <DataGridTextColumn HeaderStringFormat="부품명" Header="부품명" Binding="{Binding PartName}" Width="80" />
-                        <DataGridTextColumn HeaderStringFormat="수량" Header="수량" Binding="{Binding Quantity}" Width="80" />
-                        <DataGridTextColumn HeaderStringFormat="설정명" Header="설정명" Binding="{Binding SettingName}" Width="80" />
+                        <DataGridTextColumn Header="순서" Binding="{Binding Order}" Width="80" /> 
+                        <DataGridTextColumn Header="레벨" Binding="{Binding Level}" Width="80" />
+                        <DataGridTextColumn Header="-" Binding="{Binding Hyphen}" Width="80" />
+                        <DataGridTextColumn Header="부품명" Binding="{Binding PartName}" Width="80" />
+                        <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
+                        <DataGridTextColumn Header="설정명" Binding="{Binding SettingName}" Width="80" />
 
-                        <DataGridTextColumn HeaderStringFormat="PARTNAME" Header="PARTNAME" Binding="{Binding PARTNAME}" />
-                        <DataGridTextColumn HeaderStringFormat="SPEC" Header="SPEC" Binding="{Binding SPEC}" />
-                        <DataGridTextColumn HeaderStringFormat="MATERIAL" Header="MATERIAL" Binding="{Binding MATERIAL}" />
-                        <DataGridTextColumn HeaderStringFormat="DESIGNED" Header="DESIGNED" Binding="{Binding DESIGNED}" />
-                        <DataGridTextColumn HeaderStringFormat="WEIGHT" Header="WEIGHT" Binding="{Binding WEIGHT}" />
-                        <DataGridTextColumn HeaderStringFormat="FINISH/MAKER" Header="FINISH/MAKER" Binding="{Binding FINISHMAKER}" />
-                        <DataGridTextColumn HeaderStringFormat="CHECKED" Header="CHECKED" Binding="{Binding CHECKED}" />
-                        <DataGridTextColumn HeaderStringFormat="APPROVED" Header="APPROVED" Binding="{Binding APPROVED}" />
+                        <DataGridTextColumn Header="PARTNAME" Binding="{Binding PARTNAME}" />
+                        <DataGridTextColumn Header="SPEC" Binding="{Binding SPEC}" />
+                        <DataGridTextColumn Header="MATERIAL" Binding="{Binding MATERIAL}" />
+                        <DataGridTextColumn Header="DESIGNED" Binding="{Binding DESIGNED}" />
+                        <DataGridTextColumn Header="WEIGHT" Binding="{Binding WEIGHT}" />
+                        <DataGridTextColumn Header="FINISH/MAKER" Binding="{Binding FINISHMAKER}" />
+                        <DataGridTextColumn Header="CHECKED" Binding="{Binding CHECKED}" />
+                        <DataGridTextColumn Header="APPROVED" Binding="{Binding APPROVED}" />
                         
                         
                         

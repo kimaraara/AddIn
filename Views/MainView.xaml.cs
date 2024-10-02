@@ -33,8 +33,10 @@ namespace AddIn.Views
 
         private void MainView_Loaded(object sender, RoutedEventArgs e)
         {
-            var viewModel = DataContext as VM_MainFunctionExcel;
-            viewModel?.LoadData();
+            if(DataContext is VM_MainFunctionExcel viewModel)
+            {
+                viewModel.LoadData();
+            }
         }
 
 
@@ -74,10 +76,8 @@ namespace AddIn.Views
         // 엑셀 화면
         // Data Binding 설정
         // 엑셀출력 버튼 클릭
-        private void btnExcelPrint_Click()
-        {
-            
-        }
+       
+       
 
         // 미리보기 축소 버튼 클릭
         // 미리보기 확장 버튼 클릭
@@ -100,7 +100,6 @@ namespace AddIn.Views
         {
 
         }
-
 
     }
 
