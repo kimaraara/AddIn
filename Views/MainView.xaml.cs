@@ -98,7 +98,8 @@ namespace AddIn.Views
         // 검색 버튼 클릭
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-
+            SearchView searchView = new SearchView();
+            searchView.ShowDialog();
         }
 
     }

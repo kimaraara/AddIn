@@ -18,7 +18,7 @@ namespace AddIn.ViewModels
 {
     public class VM_MainFunctionExcel : INotifyPropertyChanged
     {
-     
+
 
         private ObservableCollection<ExcelCustomProperty> _customProperties;
         public ObservableCollection<ExcelCustomProperty> CustomProperties
@@ -31,12 +31,12 @@ namespace AddIn.ViewModels
             }
         }
 
-        public VM_MainFunctionExcel() 
+        public VM_MainFunctionExcel()
         {
             LoadData();
         }
 
-        public void LoadData() 
+        public void LoadData()
         {
             CustomProperties = new ObservableCollection<ExcelCustomProperty>();
 
@@ -50,7 +50,7 @@ namespace AddIn.ViewModels
 
             // 현재 활성화된 모델 가져오기
             ModelDoc2 swModel = swApp.ActiveDoc;
-            if (swModel == null) 
+            if (swModel == null)
             {
                 // 활성화된 모델이 없을 때
                 throw new InvalidOperationException("현재 활성화된 SolidWorks 모델이 없습니다.");
@@ -59,24 +59,28 @@ namespace AddIn.ViewModels
             // 파일명 가져오기
             string modelName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
 
-            // 사용자 정의 속성 이름과 값을 저장할 리스트
-            List<string> propertyNames = new List<string>();
-            string value = "";
+            // 사용자 정의 속성 가져오기
+            CustomPropertyManager customPropertyManager = swModel.Extension.CustomPropertyManager[""];
+            string[] propertyNames;
+            customPropertyManager.GetNames(out propertyNames); // 속성 이름을 가져옴
 
-            // 사용자 정의 속성의 이름 가져오기
-            swModel.GetCustomInfoNames(ref propertyNames);
-
-            for (int i=0; i< propertyNames.Count; i++)
+            for (int i = 0; i < propertyNames.Length; i++) 
             {
-                // 각 속성의 값을 가져와 CustomProperties에 추가
-                swModel.GetCustomProperty(propertyNames[i], out value); // 속성 값을 가져옴
+                string propertyName = propertyNames[i];
+                string PropertyValue;
+                string resolveValue;
+
+                // 각 속성의 값을 가져옴
+                customPropertyManager.Get4(propertyNames, false, out PropertyValue, out resolveValue, out _);
+                // CustomProperties에 추가
                 CustomProperties.Add(new ExcelCustomProperty
                 {
-                    Order = i + 1, // Order(순서) 는 1부터 시작
-                    Level = 0 + i,      // Level(레벨) 은 0부터 시작
+                    Order = i + 1, // Order는 1부터 시작
+                    Level = i,     // Level은 0부터 시작
                     Quantity = i + 1,
-                    PartName = modelName // 파일명이 나오도록
-
+                    PartName = modelName,        // 파일명을 PartName으로 설정
+                    PropertyName = propertyName, // 속성 이름 추가
+                    PropertyValue = resolveValue // 속성 값 추가
                 });
             }
 
@@ -90,8 +94,8 @@ namespace AddIn.ViewModels
         }
 
 
-        
+
     }
-    
-     
+
+
 }

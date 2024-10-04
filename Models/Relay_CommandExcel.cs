@@ -50,6 +50,8 @@ namespace AddIn.Models
         public string FINISHMAKER { get; set; }  // FINISH/MAKER 마감/제작자
         public bool CHECKED { get; set; }  // CHECKED 확인 여부 (체크박스)
         public bool APPROVED { get; set; }  // APPROVED 승인 여부 (체크박스)
+        public string PropertyName { get; internal set; }
+        public object PropertyValue { get; internal set; }
     }
 
 
