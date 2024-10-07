@@ -15,7 +15,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
@@ -42,15 +41,45 @@
                 <fa:ImageAwesome x:Name="icoRtnLeftMenu" Icon="Wrench" 
                            Width="15" Height="15" VerticalAlignment="Center" Margin="0"
                            />
-                        <TextBlock Grid.Column="1" Text=" 추가"/>
+                        <TextBlock Grid.Column="1" Text="추가"/>
                 </Grid>
             </Button>
+            </Grid>
+
+        <Grid Grid.Row="1">
+            <!-- 2행 1번째 열 : 엑셀 창 -->
+            <DataGrid Name="PropertyListUp" 
+                      GridLinesVisibility="All"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="True"
+                      VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Stretch"
+                      HeadersVisibility="Column" 
+                      RowHeaderWidth="30" 
+                      LoadingRow="PropertyListUp_LoadingRow">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header=" " Binding="{Binding Sequence}"
+                                        Width="45" />
+                    <DataGridTextColumn Header="변수명" Binding="{Binding VariableName}"
+                                        Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
             
+            <TextBlock Grid.Column="0" Text="첫번째" FontSize="20" 
+               VerticalAlignment="Center" HorizontalAlignment="Center" />
+
         </Grid>
+            
 
-    
 
-        
+
+
+
+
+
+
     </Grid>
 
 
