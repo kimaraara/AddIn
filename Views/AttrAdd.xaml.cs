@@ -45,7 +45,7 @@ namespace AddIn.Views
 
         public class PropertyData
         {
-            public string Sequence { get; set; } // 순번
+            public string Sequence2 { get; set; } // 순번
             public string VariableName { get; set; } // 변수명
         }
 

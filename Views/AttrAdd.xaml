@@ -59,7 +59,7 @@
                       LoadingRow="PropertyListUp_LoadingRow">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header=" " Binding="{Binding Sequence}"
+                    <DataGridTextColumn Header=" " Binding="{Binding Sequence2}"
                                         Width="45" />
                     <DataGridTextColumn Header="변수명" Binding="{Binding VariableName}"
                                         Width="*"/>
