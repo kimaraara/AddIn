@@ -61,30 +61,40 @@ namespace AddIn.ViewModels
 
             // 사용자 정의 속성 가져오기
             CustomPropertyManager customPropertyManager = swModel.Extension.CustomPropertyManager[""];
-            string[] propertyNames;
-            customPropertyManager.GetNames(out propertyNames); // 속성 이름을 가져옴
 
-            for (int i = 0; i < propertyNames.Length; i++) 
+            object[] propertyNamesObj;
+            // customPropertyManager.GetNames(out propertyNamesObj); // 속성 이름을 가져옴
+            propertyNamesObj = customPropertyManager.GetNames() as object[];  // 반환값으로 처리 (out 파라미터 없음)
+
+            string[] propertyNames = propertyNamesObj?.Cast<string>().ToArray();
+
+
+            if (propertyNames != null)
             {
-                string propertyName = propertyNames[i];
-                string PropertyValue;
-                string resolveValue;
-
-                // 각 속성의 값을 가져옴
-                customPropertyManager.Get4(propertyNames, false, out PropertyValue, out resolveValue, out _);
-                // CustomProperties에 추가
-                CustomProperties.Add(new ExcelCustomProperty
+                for (int i = 0; i < propertyNames.Length; i++)
                 {
-                    Order = i + 1, // Order는 1부터 시작
-                    Level = i,     // Level은 0부터 시작
-                    Quantity = i + 1,
-                    PartName = modelName,        // 파일명을 PartName으로 설정
-                    PropertyName = propertyName, // 속성 이름 추가
-                    PropertyValue = resolveValue // 속성 값 추가
-                });
+                    string propertyName = propertyNames[i];
+                    string PropertyValue;
+                    string resolveValue;
+
+
+                    // 각 속성의 값을 가져옴
+                    customPropertyManager.Get4(propertyNames[i], false, out PropertyValue, out resolveValue);
+                    // CustomProperties에 추가
+                    CustomProperties.Add(new ExcelCustomProperty
+                    {
+                        Order = i + 1, // Order는 1부터 시작
+                        Level = i,     // Level은 0부터 시작
+                        Quantity = i + 1,
+                        PartName = modelName,           // 파일명을 PartName으로 설정
+                        PropertyName = propertyName, // 속성 이름 추가
+                        PropertyValue = resolveValue,    // 속성 값 추가
+                    });
+                }
             }
 
             OnPropertyChanged(nameof(CustomProperties));
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
