@@ -27,21 +27,24 @@ namespace AddIn.ViewModels
             set { _fileName = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<PropertyItem> _customProperties;
+        // fileName은 하나의 데이터만 저장되는 반면 CustomProperties와 ConfigurationProperties는 여러개의 데이터를 저장함
+        // 사용자 속성 값
+        private ObservableCollection<PropertyItem> _customProperties; 
         public ObservableCollection<PropertyItem> CustomProperties
         {
             get { return _customProperties; }
             set { _customProperties = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<PropertyItem> _configurationProperties;
+        // 설정 속성 값
+        private ObservableCollection<PropertyItem> _configurationProperties; 
         public ObservableCollection<PropertyItem> ConfigurationProperties
         {
             get { return _configurationProperties; }
             set { _configurationProperties = value; OnPropertyChanged(); }
         }
 
-        // 커멘드 영역
+        // 커멘드 영역 : 뷰모델에서 뷰에 이벤트를 전달하는 용도
         public ICommand RefreshCommand { get; }
 
         // 생성자

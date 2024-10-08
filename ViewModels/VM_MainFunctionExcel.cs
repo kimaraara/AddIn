@@ -13,13 +13,11 @@ using System.Windows.Input;
 using AddIn.Models;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-
 namespace AddIn.ViewModels
 {
+    // MainView.xaml 과 연결되어 있음
     public class VM_MainFunctionExcel : INotifyPropertyChanged
-    {
-
-
+    { 
         private ObservableCollection<ExcelCustomProperty> _customProperties;
         public ObservableCollection<ExcelCustomProperty> CustomProperties
         {
@@ -31,8 +29,22 @@ namespace AddIn.ViewModels
             }
         }
 
+        private ObservableCollection<PropertyItem> _configurationProperties;
+        public ObservableCollection<PropertyItem> ConfigurationProperties
+        {
+            get { return _configurationProperties; }
+            set { _configurationProperties = value; OnPropertyChanged(); }
+        }
+
+        // 커멘드 영역 : 뷰모델에서 뷰에 이벤트를 전달하는 용도
+        public ICommand RefreshCommand { get; }
+
         public VM_MainFunctionExcel()
         {
+            CustomProperties = new ObservableCollection<PropertyItem>();
+            ConfigurationProperties = new ObservableCollection<PropertyItem>();
+            RefreshCommand = new Relay_Command(LoadData);
+            
             LoadData();
         }
 
@@ -68,7 +80,6 @@ namespace AddIn.ViewModels
 
             string[] propertyNames = propertyNamesObj?.Cast<string>().ToArray();
 
-
             if (propertyNames != null)
             {
                 for (int i = 0; i < propertyNames.Length; i++)
@@ -76,7 +87,6 @@ namespace AddIn.ViewModels
                     string propertyName = propertyNames[i];
                     string PropertyValue;
                     string resolveValue;
-
 
                     // 각 속성의 값을 가져옴
                     customPropertyManager.Get4(propertyNames[i], false, out PropertyValue, out resolveValue);
@@ -102,10 +112,5 @@ namespace AddIn.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-
     }
-
-
 }
