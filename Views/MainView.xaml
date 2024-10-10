@@ -85,7 +85,7 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
-
+                    
                  <!--
                 <Button Content="엑셀출력" x:Name="btnExcelPrint" Click="btnExcelPrint_Click"
                         Width="100" Background="Ivory">
@@ -98,10 +98,14 @@
                     
                 </Button>
                     -->
+                <Label Content="파일명"/>
+                <Label Content="{Binding FileName}"/>
+
             </StackPanel> 
             
             
             <StackPanel Grid.Column="1"  Orientation="Horizontal">
+                <Button Margin="5" x:Name="btnRefresh" Width="50" Command="{Binding RefreshCommand}" Content="새로고침"/>
                 <Button Width="100" Content="미리보기 축소" Background="Ivory" />
                 <Button Width="100" Content="미리보기 확장" Background="Ivory" />
             </StackPanel>
@@ -163,6 +167,10 @@
                         <DataGridTextColumn Header="부품명" Binding="{Binding PartName}" Width="80" />
                         <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
                         <DataGridTextColumn Header="설정명" Binding="{Binding SettingName}" Width="80" />
+                        <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
 
                         <DataGridTextColumn Header="PARTNAME" Binding="{Binding PARTNAME}" />
                         <DataGridTextColumn Header="SPEC" Binding="{Binding SPEC}" />

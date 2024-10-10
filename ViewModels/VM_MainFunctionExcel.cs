@@ -13,11 +13,18 @@ using System.Windows.Input;
 using AddIn.Models;
 using DocumentFormat.OpenXml.Wordprocessing;
 
+ // MainView.xaml 과 연결되어 있음
 namespace AddIn.ViewModels
 {
-    // MainView.xaml 과 연결되어 있음
     public class VM_MainFunctionExcel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         // 데이터 영역
         // _fileName : 클래스 내부에서만 접근이 가능, 데이터가 실제로 저장되는 공간의 역할 (데이터 보관)
         private string _fileName;
@@ -58,7 +65,7 @@ namespace AddIn.ViewModels
             GetProperties();
         }
 
-         // 현재 활성화된 모델 가져오기
+        // 현재 활성화된 모델 가져오기
         private void GetProperties()
         {
             // SldWorks : 솔리드 웍스 프로그램 자체를 의미
@@ -72,73 +79,114 @@ namespace AddIn.ViewModels
             // 어셈블리 명시적 할당 : AssemblyDoc
             // 도면 명시적 할당 : DrawingDoc 키워드 사용
 
+            // 만약 열려져 있는 파일이 없다면 swModel 은 null 이 될 것이기 때문에 그 이후 에러를 막기 위해 조건 추가
             if (swModel == null)
             {
-                // 활성화된 모델이 없을 때 , 여기부터 다시 
-                throw new InvalidOperationException("현재 활성화된 SolidWorks 모델이 없습니다.");
+                // 활성화된 모델이 없을 때
+                // throw new InvalidOperationException("현재 활성화된 SolidWorks 모델이 없습니다.");
 
                 // 파일 이름 가져오기
-                FileName = swModel.GetTitle();
+                FileName = swModel.GetTitle(); // swModel : 현재 열려 있는 파일 GetTitle : 파일 이름을 가져옴
                 CustomProperties.Clear();
                 ConfigurationProperties.Clear();
-            }
-        }
-        public void LoadData()
-        {
-            CustomProperties = new ObservableCollection<ExcelCustomProperty>();
 
-            // SolidWorks 애플리케이션 인스턴스 가져오기
-            SldWorks swApp = Activator.CreateInstance(Type.GetTypeFromProgID("SldWorks.Application")) as SldWorks;
-            if (swApp == null)
-            {
-                // SolidWorks 가 실행 중이지 않다면 예외 처리 or 로그 출력
-                throw new InvalidOperationException("SolidWorks 가 실행 중이지 않습니다.");
-            }
+                // 커스텀 속성 가져오기 (사용자 정의 속성)
+                // Extension :  확장 기능을 위한 부분 (Custom 속성은 확장 기능에 속하기 때문에 해당 메서드를 통해서만 접근 가능)
+                // [""] : 커스텀 속성의 기본 구성을 가져오기 위해 사용
+                CustomPropertyManager customPropMgr = swModel.Extension.CustomPropertyManager[""];
+                string[] customPropNames = customPropMgr.GetNames(); //  사용자 정의 속성의 이름들을 가져와 문자열 배열로 할당
 
-
-           
-
-            // 파일명 가져오기
-            string modelName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
-
-            // 사용자 정의 속성 가져오기
-            CustomPropertyManager customPropertyManager = swModel.Extension.CustomPropertyManager[""];
-
-            object[] propertyNamesObj;
-            // customPropertyManager.GetNames(out propertyNamesObj); // 속성 이름을 가져옴
-            propertyNamesObj = customPropertyManager.GetNames() as object[];  // 반환값으로 처리 (out 파라미터 없음)
-
-            string[] propertyNames = propertyNamesObj?.Cast<string>().ToArray();
-
-            if (propertyNames != null)
-            {
-                for (int i = 0; i < propertyNames.Length; i++)
+                // 이름들을 순회하면서 customPropMgr의 Get2메서드를 사용하여 값을 가져옴
+                foreach (string propName in customPropNames)
                 {
-                    string propertyName = propertyNames[i];
-                    string PropertyValue;
-                    string resolveValue;
+                    string valOut;
+                    string resolvedValOut;
+                    customPropMgr.Get2(propName, out valOut, out resolvedValOut);
+                    // 값을 가져온 다음 위에서 Clear 했던 CustomProperties에 새로운 요소로 추가
+                    // CustomProperties는 앞서 View파일의 데이터 그리드에 바인딩 된 값
+                    CustomProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = true });
+                }
 
-                    // 각 속성의 값을 가져옴
-                    customPropertyManager.Get4(propertyNames[i], false, out PropertyValue, out resolveValue);
-                    // CustomProperties에 추가
-                    CustomProperties.Add(new ExcelCustomProperty
-                    {
-                        Order = i + 1, // Order는 1부터 시작
-                        Level = i,     // Level은 0부터 시작
-                        Quantity = i + 1,
-                        PartName = modelName,           // 파일명을 PartName으로 설정
-                        PropertyName = propertyName, // 속성 이름 추가
-                        PropertyValue = resolveValue,    // 속성 값 추가
-                    });
+                // 설정 속성 가져오기
+                ConfigurationManager configMgr = swModel.ConfigurationManager;
+                // ConfigurationManager : 솔리드 웍스 모델의 모든 구성을 관리하는 키워드
+                Configuration config = configMgr.ActiveConfiguration;
+                // Configuration : 솔리드 웍스 모델의 특정 구성을 나타내기 위한 클래스
+
+                CustomPropertyManager configPropMgr = config.CustomPropertyManager;
+                string[] configPropNames = configPropMgr.GetNames();
+
+                foreach (string propName in configPropNames)
+                {
+                    string valOut;
+                    string resolvedValOut;
+                    configPropMgr.Get2(propName, out valOut, out resolvedValOut);
+                    ConfigurationProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = false });
                 }
             }
+            else
+            {
+                FileName = "열린 파일이 없습니다.";
+            }
 
-            OnPropertyChanged(nameof(CustomProperties));
+        }
+        /*
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        */
+     }
 
+    public class PropertyItem : INotifyPropertyChanged
+    {
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; OnPropertyChanged(); }
+        }
+
+        private string _value;
+        public string Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                OnPropertyChanged();
+                UpdateProperty();
+            }
+        }
+
+        public bool IsCustomProperty { get; set; }
+
+        private void UpdateProperty()
+        {
+            SldWorks swApp = new SldWorks();
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+
+            if (swModel != null)
+            {
+                CustomPropertyManager propMgr;
+                if (IsCustomProperty) // 변경된 값이 사용자 정의 값인지, 설정 속성값인지 구분
+                {
+                    propMgr = swModel.Extension.CustomPropertyManager[""];
+                }
+                else
+                {
+                    ConfigurationManager configMgr = swModel.ConfigurationManager;
+                    Configuration config = configMgr.ActiveConfiguration;
+                    propMgr = config.CustomPropertyManager;
+                }
+
+                propMgr.Set2(Name, Value); // 실제 값을 할당하는 부분 (Set2 함수 사용)
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
