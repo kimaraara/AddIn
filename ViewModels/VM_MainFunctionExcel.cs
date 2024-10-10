@@ -17,18 +17,29 @@ namespace AddIn.ViewModels
 {
     // MainView.xaml 과 연결되어 있음
     public class VM_MainFunctionExcel : INotifyPropertyChanged
-    { 
-        private ObservableCollection<ExcelCustomProperty> _customProperties;
-        public ObservableCollection<ExcelCustomProperty> CustomProperties
+    {
+        // 데이터 영역
+        // _fileName : 클래스 내부에서만 접근이 가능, 데이터가 실제로 저장되는 공간의 역할 (데이터 보관)
+        private string _fileName;
+
+        // _fileName을 UI에 노출시키고 어떠한 사유로든 값이 변경 되었을 때, 업데이트 하는 역할 (데이터 변경 사실 알림)
+        // 프로그램 내부(백엔드)와 외부(프론트엔드)에서 사용할 각각의 값
+        public string FileName
         {
-            get => _customProperties;
-            set
-            {
-                _customProperties = value;
-                OnPropertyChanged(nameof(CustomProperties));
-            }
+            get { return _fileName; }
+            set { _fileName = value; OnPropertyChanged(); }
         }
 
+        // fileName은 하나의 데이터만 저장되는 반면 CustomProperties와 ConfigurationProperties는 여러개의 데이터를 저장함
+        // 사용자 속성 값
+        private ObservableCollection<PropertyItem> _customProperties;
+        public ObservableCollection<PropertyItem> CustomProperties
+        {
+            get { return _customProperties; }
+            set { _customProperties = value; OnPropertyChanged(); }
+        }
+
+        // 설정 속성 값
         private ObservableCollection<PropertyItem> _configurationProperties;
         public ObservableCollection<PropertyItem> ConfigurationProperties
         {
@@ -43,11 +54,35 @@ namespace AddIn.ViewModels
         {
             CustomProperties = new ObservableCollection<PropertyItem>();
             ConfigurationProperties = new ObservableCollection<PropertyItem>();
-            RefreshCommand = new Relay_Command(LoadData);
-            
-            LoadData();
+            RefreshCommand = new Relay_Command(GetProperties);
+            GetProperties();
         }
 
+         // 현재 활성화된 모델 가져오기
+        private void GetProperties()
+        {
+            // SldWorks : 솔리드 웍스 프로그램 자체를 의미
+            SldWorks swApp = new SldWorks();
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+            // 솔리드 웍스 프로그램 인터페이스를 새로 생성 (현재 열려있는 솔리드 웍스와 직접 연결)
+            // ActiveDoc : 활성화 된 문서 (호환&데이터 타입을 변환해주기 위해 붙임)
+
+            // 솔리드 웍스 부품, 어셈블리, 도면 중 할당하기 위해 ModelDoc2 키워드 사용
+            // 부품 명시적 할당 : PartDoc
+            // 어셈블리 명시적 할당 : AssemblyDoc
+            // 도면 명시적 할당 : DrawingDoc 키워드 사용
+
+            if (swModel == null)
+            {
+                // 활성화된 모델이 없을 때 , 여기부터 다시 
+                throw new InvalidOperationException("현재 활성화된 SolidWorks 모델이 없습니다.");
+
+                // 파일 이름 가져오기
+                FileName = swModel.GetTitle();
+                CustomProperties.Clear();
+                ConfigurationProperties.Clear();
+            }
+        }
         public void LoadData()
         {
             CustomProperties = new ObservableCollection<ExcelCustomProperty>();
@@ -60,13 +95,8 @@ namespace AddIn.ViewModels
                 throw new InvalidOperationException("SolidWorks 가 실행 중이지 않습니다.");
             }
 
-            // 현재 활성화된 모델 가져오기
-            ModelDoc2 swModel = swApp.ActiveDoc;
-            if (swModel == null)
-            {
-                // 활성화된 모델이 없을 때
-                throw new InvalidOperationException("현재 활성화된 SolidWorks 모델이 없습니다.");
-            }
+
+           
 
             // 파일명 가져오기
             string modelName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
