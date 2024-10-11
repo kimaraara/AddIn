@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace AddIn.Models
@@ -42,6 +43,9 @@ namespace AddIn.Models
         public string PartName { get; set; }  // 부품명
         public int Quantity { get; set; }  // 수량
         public string SettingName { get; set; }  // 설정명
+        public string Name {  get; set; } //  Custom Property Name
+        public string Value { get; set; } // Value
+        public string Description { get; set; }
         public string PARTNAME { get; set; }  // PARTNAME
         public string SPEC { get; set; }  // SPEC 사양
         public string MATERIAL { get; set; }  // MATERIAL 재질

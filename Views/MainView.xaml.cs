@@ -28,16 +28,9 @@ namespace AddIn.Views
         public MainView()
         {
             InitializeComponent();
-            Loaded += MainView_Loaded;
         }
 
-        private void MainView_Loaded(object sender, RoutedEventArgs e)
-        {
-            if(DataContext is VM_MainFunctionExcel viewModel)
-            {
-                viewModel.LoadData();
-            }
-        }
+        
 
 
         // 기본기능 버튼 클릭

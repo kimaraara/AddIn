@@ -25,11 +25,11 @@ namespace AddIn.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // 데이터 영역
+        // ▼데이터 영역
         // _fileName : 클래스 내부에서만 접근이 가능, 데이터가 실제로 저장되는 공간의 역할 (데이터 보관)
         private string _fileName;
 
-        // _fileName을 UI에 노출시키고 어떠한 사유로든 값이 변경 되었을 때, 업데이트 하는 역할 (데이터 변경 사실 알림)
+        // FileName : _fileName을 UI에 노출시키고 어떠한 사유로든 값이 변경 되었을 때, 업데이트 하는 역할 (데이터 변경 사실 알림)
         // 프로그램 내부(백엔드)와 외부(프론트엔드)에서 사용할 각각의 값
         public string FileName
         {
@@ -38,7 +38,7 @@ namespace AddIn.ViewModels
         }
 
         // fileName은 하나의 데이터만 저장되는 반면 CustomProperties와 ConfigurationProperties는 여러개의 데이터를 저장함
-        // 사용자 속성 값
+        // ▼사용자 속성 값
         private ObservableCollection<PropertyItem> _customProperties;
         public ObservableCollection<PropertyItem> CustomProperties
         {
@@ -46,7 +46,7 @@ namespace AddIn.ViewModels
             set { _customProperties = value; OnPropertyChanged(); }
         }
 
-        // 설정 속성 값
+        // ▼설정 속성 값
         private ObservableCollection<PropertyItem> _configurationProperties;
         public ObservableCollection<PropertyItem> ConfigurationProperties
         {
@@ -54,7 +54,7 @@ namespace AddIn.ViewModels
             set { _configurationProperties = value; OnPropertyChanged(); }
         }
 
-        // 커멘드 영역 : 뷰모델에서 뷰에 이벤트를 전달하는 용도
+        // ▼커멘드 영역 : 뷰모델에서 뷰에 이벤트를 전달하는 용도
         public ICommand RefreshCommand { get; }
 
         public VM_MainFunctionExcel()
@@ -65,7 +65,7 @@ namespace AddIn.ViewModels
             GetProperties();
         }
 
-        // 현재 활성화된 모델 가져오기
+        // ▼현재 활성화된 모델 가져오기
         private void GetProperties()
         {
             // SldWorks : 솔리드 웍스 프로그램 자체를 의미
@@ -90,13 +90,13 @@ namespace AddIn.ViewModels
                 CustomProperties.Clear();
                 ConfigurationProperties.Clear();
 
-                // 커스텀 속성 가져오기 (사용자 정의 속성)
+                // ▼커스텀 속성 가져오기 (사용자 정의 속성)
                 // Extension :  확장 기능을 위한 부분 (Custom 속성은 확장 기능에 속하기 때문에 해당 메서드를 통해서만 접근 가능)
                 // [""] : 커스텀 속성의 기본 구성을 가져오기 위해 사용
                 CustomPropertyManager customPropMgr = swModel.Extension.CustomPropertyManager[""];
                 string[] customPropNames = customPropMgr.GetNames(); //  사용자 정의 속성의 이름들을 가져와 문자열 배열로 할당
 
-                // 이름들을 순회하면서 customPropMgr의 Get2메서드를 사용하여 값을 가져옴
+                // 이름들을 순회하면서 customPropMgr의 Get2 메서드를 사용하여 값을 가져옴
                 foreach (string propName in customPropNames)
                 {
                     string valOut;
@@ -107,7 +107,7 @@ namespace AddIn.ViewModels
                     CustomProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = true });
                 }
 
-                // 설정 속성 가져오기
+                // ▼설정 속성 가져오기
                 ConfigurationManager configMgr = swModel.ConfigurationManager;
                 // ConfigurationManager : 솔리드 웍스 모델의 모든 구성을 관리하는 키워드
                 Configuration config = configMgr.ActiveConfiguration;
