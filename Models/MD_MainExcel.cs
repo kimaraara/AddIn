@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Controls;
 
 namespace AddIn.Models
 {
@@ -25,16 +26,17 @@ namespace AddIn.Models
         public string FINISHMAKER { get; set; }  // FINISH/MAKER 마감/제작자
         public bool CHECKED { get; set; }  // CHECKED 확인 여부 (체크박스)
         public bool APPROVED { get; set; }  // APPROVED 승인 여부 (체크박스)
-        public string PropertyName { get; internal set; }
-        public object PropertyValue { get; internal set; }
+        public string PropertyName { get; set; }
+        public object PropertyValue { get; set; }
     }
 
-    internal class MD_MainExcel2 : ICommand
+    
+    public class ExcelView : ICommand
     {
         private readonly Action _execute;
         private readonly Func<bool> _canExecute;
 
-        public MD_MainExcel2(Action execute, Func<bool> canExecute = null)
+        public ExcelView(Action execute, Func<bool> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -56,6 +58,7 @@ namespace AddIn.Models
             remove { CommandManager.RequerySuggested -= value; }
         }
     }
+    
 
 
 }

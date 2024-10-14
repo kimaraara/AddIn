@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 // using System.Windows.Forms;
 using AddIn.ViewModels;
+using AddIn.Models;
 
 namespace AddIn.Views
 {
@@ -28,6 +29,7 @@ namespace AddIn.Views
         public MainView()
         {
             InitializeComponent();
+            DataContext = new MD_MainExcel();
         }
 
         

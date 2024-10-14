@@ -68,22 +68,82 @@ namespace AddIn.ViewModels
         }
 
         // ▼커멘드 영역 : 뷰모델에서 뷰에 이벤트를 전달하는 용도
-        public ICommand command;
+        public ICommand ExcelView { get; set; }
 
         public VM_MainFunctionExcel()
         { 
             CustomProperties = new ObservableCollection<PropertyItem>();
             ConfigurationProperties = new ObservableCollection<PropertyItem>();
-            command = new MD_MainExcel2(GetProperties);
-            GetProperties();
+            //ExcelView = new ExcelView(GetProperties);
 
-            MainExcels = new ObservableCollection<MD_MainExcel> 
+            // MD_MainExcel 데이터 초기화
+            //MainExcels = new ObservableCollection<MD_MainExcel>();
+            
+            // GetProperties 메서드 호출, SolidWorks 데이터 가져오기
+            //GetProperties();
+
+
+
+
+
+
+            // 예시 데이터 추가
+            CustomProperties = new ObservableCollection<PropertyItem>
+        {
+            new PropertyItem
             {
-                new MD_MainExcel
-                {
-
-                }   
+                Order = 1,
+                Level = 0,
+                PartName = "Part 1",
+                Quantity = 10,
+                SettingName = "Setting 1",
+                PARTNAME = "Part1_NAME",
+                SPEC = "SPEC 1",
+                MATERIAL = "Material 1",
+                DESIGNED = "2024-01-01",
+                WEIGHT = "2kg",
+                FINISHMAKER = "Maker 1",
+                Name = "Custom Property 1",
+                Value = "Value 1"
+            },
+            new PropertyItem
+            {
+                Order = 2,
+                Level = 1,
+                PartName = "Part 2",
+                Quantity = 5,
+                SettingName = "Setting 2",
+                PARTNAME = "Part2_NAME",
+                SPEC = "SPEC 2",
+                MATERIAL = "Material 2",
+                DESIGNED = "2024-02-01",
+                WEIGHT = "1.5kg",
+                FINISHMAKER = "Maker 2",
+                Name = "Custom Property 2",
+                Value = "Value 2"
+            },
+                        new PropertyItem
+            {
+                Order = 2,
+                Level = 1,
+                PartName = "Part 2",
+                Quantity = 5,
+                SettingName = "Setting 2",
+                PARTNAME = "Part2_NAME",
+                SPEC = "SPEC 2",
+                MATERIAL = "Material 2",
+                DESIGNED = "2024-02-01",
+                WEIGHT = "1.5kg",
+                FINISHMAKER = "Maker 2",
+                Name = "Custom Property 2",
+                Value = "Value 2"
             }
+        };
+
+
+
+
+
 
         }
 
@@ -102,7 +162,7 @@ namespace AddIn.ViewModels
             // 도면 명시적 할당 : DrawingDoc 키워드 사용
 
             // 만약 열려져 있는 파일이 없다면 swModel 은 null 이 될 것이기 때문에 그 이후 에러를 막기 위해 조건 추가
-            if (swModel == null)
+            if (swModel != null)
             {
                 // 활성화된 모델이 없을 때
                 // throw new InvalidOperationException("현재 활성화된 SolidWorks 모델이 없습니다.");
@@ -118,16 +178,20 @@ namespace AddIn.ViewModels
                 CustomPropertyManager customPropMgr = swModel.Extension.CustomPropertyManager[""];
                 string[] customPropNames = customPropMgr.GetNames(); //  사용자 정의 속성의 이름들을 가져와 문자열 배열로 할당
 
-                // 이름들을 순회하면서 customPropMgr의 Get2 메서드를 사용하여 값을 가져옴
-                foreach (string propName in customPropNames)
+                if (customPropNames != null)
                 {
-                    string valOut;
-                    string resolvedValOut;
-                    customPropMgr.Get2(propName, out valOut, out resolvedValOut);
-                    // 값을 가져온 다음 위에서 Clear 했던 CustomProperties에 새로운 요소로 추가
-                    // CustomProperties는 앞서 View파일의 데이터 그리드에 바인딩 된 값
-                    CustomProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = true });
+                    // 이름들을 순회하면서 customPropMgr의 Get2 메서드를 사용하여 값을 가져옴
+                    foreach (string propName in customPropNames)
+                    {
+                        string valOut;
+                        string resolvedValOut;
+                        customPropMgr.Get2(propName, out valOut, out resolvedValOut);
+                        // 값을 가져온 다음 위에서 Clear 했던 CustomProperties에 새로운 요소로 추가
+                        // CustomProperties는 앞서 View파일의 데이터 그리드에 바인딩 된 값
+                        CustomProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = true });
+                    }
                 }
+               
 
                 // ▼설정 속성 가져오기
                 ConfigurationManager configMgr = swModel.ConfigurationManager;
@@ -138,12 +202,15 @@ namespace AddIn.ViewModels
                 CustomPropertyManager configPropMgr = config.CustomPropertyManager;
                 string[] configPropNames = configPropMgr.GetNames();
 
-                foreach (string propName in configPropNames)
+                if (configPropNames != null) // 수정된 부분: null 체크 추가
                 {
-                    string valOut;
-                    string resolvedValOut;
-                    configPropMgr.Get2(propName, out valOut, out resolvedValOut);
-                    ConfigurationProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = false });
+                    foreach (string propName in configPropNames)
+                    {
+                        string valOut;
+                        string resolvedValOut;
+                        configPropMgr.Get2(propName, out valOut, out resolvedValOut);
+                        ConfigurationProperties.Add(new PropertyItem { Name = propName, Value = resolvedValOut, IsCustomProperty = false });
+                    }
                 }
             }
             else
@@ -176,36 +243,89 @@ namespace AddIn.ViewModels
             get { return _value; }
             set
             {
-                _value = value;
-                OnPropertyChanged();
-                UpdateProperty();
+                if (_value != value) // 값이 변경된 경우에만 갱신
+                {
+                    _value = value;
+                    OnPropertyChanged();
+                    UpdateProperty(); // Value가 변경될 때만 호출
+                }
             }
         }
 
         public bool IsCustomProperty { get; set; }
 
-        private void UpdateProperty()
-        {
-            SldWorks swApp = new SldWorks();
-            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+        // SolidWorks 객체를 한 번만 초기화하도록 변경
+        private SldWorks _swApp;
+        private ModelDoc2 _swModel;
+        private CustomPropertyManager _propMgr;
 
-            if (swModel != null)
+        public PropertyItem() 
+        {
+            // SolidWorks 객체 초기화
+            _swApp = new SldWorks();
+            _swModel = (ModelDoc2)_swApp.ActiveDoc;
+
+            if (_swModel != null) 
             {
-                CustomPropertyManager propMgr;
-                if (IsCustomProperty) // 변경된 값이 사용자 정의 값인지, 설정 속성값인지 구분
+                // 사용자 정의 속성 또는 설정 속성 초기화
+                if (IsCustomProperty)
                 {
-                    propMgr = swModel.Extension.CustomPropertyManager[""];
+                    _propMgr = _swModel.Extension.CustomPropertyManager[""];
                 }
                 else
                 {
-                    ConfigurationManager configMgr = swModel.ConfigurationManager;
+                    ConfigurationManager configMgr = _swModel.ConfigurationManager;
                     Configuration config = configMgr.ActiveConfiguration;
-                    propMgr = config.CustomPropertyManager;
+                    _propMgr = config.CustomPropertyManager;
                 }
-
-                propMgr.Set2(Name, Value); // 실제 값을 할당하는 부분 (Set2 함수 사용)
             }
         }
+
+
+        private void UpdateProperty()
+        {
+            // _swModel과 _propMgr가 null인지 확인하고 수정
+            if (_swModel != null && _propMgr != null)
+            {
+                _propMgr.Set2(Name, Value); // 실제 값을 할당하는 부분
+            }
+        }
+
+
+
+
+        public int Order { get; set; }  // 순서 1부터 시작
+        public int Level { get; set; }  // 레벨 0부터 시작
+        public string PartName { get; set; }  // 부품명
+        public int Quantity { get; set; }  // 수량
+        public string SettingName { get; set; }  // 설정명
+        public string Name2 { get; set; } //  Custom Property Name
+        public string Value2 { get; set; } // Value
+        public string Description { get; set; }
+        public string PARTNAME { get; set; }  // PARTNAME
+        public string SPEC { get; set; }  // SPEC 사양
+        public string MATERIAL { get; set; }  // MATERIAL 재질
+        public string DESIGNED { get; set; }  // DESIGNED
+        public string WEIGHT { get; set; }  // WEIGHT 무게
+        public string FINISHMAKER { get; set; }  // FINISH/MAKER 마감/제작자
+        public bool CHECKED { get; set; }  // CHECKED 확인 여부 (체크박스)
+        public bool APPROVED { get; set; }  // APPROVED 승인 여부 (체크박스)
+        public string PropertyName { get; set; }
+        public object PropertyValue { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
