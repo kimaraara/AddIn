@@ -18,6 +18,19 @@ namespace AddIn.ViewModels
 {
     public class VM_MainFunctionExcel : INotifyPropertyChanged
     {
+        // Models 의 MD_MainExcel 
+        private ObservableCollection<MD_MainExcel> _mainExcels;
+
+        public ObservableCollection<MD_MainExcel> MainExcels
+        {
+            get => _mainExcels;
+            set
+            {
+                _mainExcels = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -55,14 +68,23 @@ namespace AddIn.ViewModels
         }
 
         // ▼커멘드 영역 : 뷰모델에서 뷰에 이벤트를 전달하는 용도
-        public ICommand RefreshCommand { get; }
+        public ICommand command;
 
         public VM_MainFunctionExcel()
-        {
+        { 
             CustomProperties = new ObservableCollection<PropertyItem>();
             ConfigurationProperties = new ObservableCollection<PropertyItem>();
-            RefreshCommand = new Relay_Command(GetProperties);
+            command = new MD_MainExcel2(GetProperties);
             GetProperties();
+
+            MainExcels = new ObservableCollection<MD_MainExcel> 
+            {
+                new MD_MainExcel
+                {
+
+                }   
+            }
+
         }
 
         // ▼현재 활성화된 모델 가져오기
