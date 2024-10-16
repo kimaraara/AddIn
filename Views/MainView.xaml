@@ -88,7 +88,7 @@
                     </Button.ContextMenu>
                 </Button>
                     
-                 <!--
+                 
                 <Button Content="엑셀출력" x:Name="btnExcelPrint" Click="btnExcelPrint_Click"
                         Width="100" Background="Ivory">
                     
@@ -97,17 +97,20 @@
                             <MenuItem Header="" />
                         </ContextMenu>
                     </Button.ContextMenu>
-                    
                 </Button>
-                    -->
+                 
                 <Label Content="파일명" />
                 <Label Content="{Binding FileName}"/>
+
+                
+                <Button x:Name="btnRefresh" Content="새로고침" Width="50" Height="50"
+                        Command="{Binding RefreshCommand}" />
+
 
             </StackPanel> 
             
             
             <StackPanel Grid.Column="1"  Orientation="Horizontal">
-                <Button Margin="5" x:Name="btnRefresh" Width="50" Command="{Binding RefreshCommand}" Content="새로고침"/>
                 <Button Width="100" Content="미리보기 축소" Background="Ivory" />
                 <Button Width="100" Content="미리보기 확장" Background="Ivory" />
             </StackPanel>

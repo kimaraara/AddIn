@@ -76,9 +76,29 @@ namespace AddIn.Views
 
         // 엑셀 화면
         // Data Binding 설정
+
+        // 10/16 오후 추가
         // 엑셀출력 버튼 클릭
-       
-       
+        private void btnExcelPrint_Click(object sender, RoutedEventArgs e)
+        {
+            // 경고창 표시
+            MessageBoxResult result = MessageBox.Show(
+                "현재 화면을 엑셀 출력 하시겠습니까?",  // 메시지 내용
+                "엑셀 출력",                                          // 메시지 상자 제목
+                MessageBoxButton.YesNo,                 // 버튼 옵션 (예/아니오)
+                MessageBoxImage.Warning);             // 경고 아이콘
+
+            // 사용자가 "예"를 선택했을 때만 엑셀 출력 동작 실행
+            if (result == MessageBoxResult.Yes)
+            {
+                // 엑셀 출력 로직
+                // 예: 엑셀 파일 생성 및 저장
+            }
+        }
+
+        // 새로고침
+
+
 
         // 미리보기 축소 버튼 클릭
         // 미리보기 확장 버튼 클릭
@@ -103,6 +123,7 @@ namespace AddIn.Views
             searchView.ShowDialog();
         }
 
+        
     }
 
 }

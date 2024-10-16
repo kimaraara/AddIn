@@ -12,12 +12,21 @@ namespace AddIn.Models
 {
     public class MD_PropertyItem : INotifyPropertyChanged
     {
+        private int _order; // 순서
+        private int _level; // 레벨
+        private string _partName; // 부품명
+        private int _quantity; // 수량
+        private string _settingName; // 설정명
+        // 10/16 오후 추가
+
         private string _name;
         private string _value;
         private bool _isCustomProperty;
+
         private SldWorks _swApp;
         private ModelDoc2 _swModel;
         private CustomPropertyManager _propMgr;
+        
 
         public MD_PropertyItem()
         {
@@ -37,6 +46,77 @@ namespace AddIn.Models
                     ConfigurationManager configMgr = _swModel.ConfigurationManager;
                     Configuration config = configMgr.ActiveConfiguration;
                     _propMgr = config.CustomPropertyManager;
+                }
+            }
+        }
+
+        // 10/16 오후 추가
+        // 순서
+        public int Order
+        {
+            get => _order;
+            set
+            {
+                if (_order != value)
+                {
+                    _order = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // 레벨
+        public int Level
+        {
+            get => (int)_level;
+            set
+            {
+                if (_level != value) 
+                {
+                    _level = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // 부품명
+        public string PartName
+        {
+            get => _partName;
+            set
+            {
+                if (_partName != value)
+                {
+                    _partName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // 수량
+        public int Quantity
+        {
+            get => _quantity;
+            set
+            {
+                if( _quantity != value)
+                {
+                    _quantity = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // 설정명
+        public string SettingName
+        {
+            get => _settingName;
+            set
+            {
+                if( _settingName != value)
+                {
+                    _settingName = value;
+                    OnPropertyChanged();
                 }
             }
         }
