@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AddIn.Views"
              xmlns:vm="clr-namespace:AddIn.ViewModels"
-
+             Loaded="Window_Loaded"
                        
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
 
     <Window.DataContext>
-        <vm:VM_MainFunctionExcel />
+        <vm:VM_MainFunctionExcel2 />
     </Window.DataContext>
 
 
@@ -138,69 +138,102 @@
                 </Grid.RowDefinitions>
                 
             </Grid>
+
+            <!-- 손주임님 코드 -->
+            <!--AutoGenerateColumns = False 에서 변경-->
             <ScrollViewer Margin="5" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
-             
+                <StackPanel>
+                    <DataGrid x:Name="ExcelGrid" 
+                              AutoGenerateColumns="True" 
+                              HeadersVisibility="All" 
+                              CanUserAddRows="False"
+                              IsReadOnly="False" 
+                              GridLinesVisibility="All"
+                              RowHeaderWidth="0" 
+                              AlternatingRowBackground="LightGray"
+                              SelectionMode="Extended" 
+                              SelectionUnit="CellOrRowHeader"
+                              ItemsSource="{Binding CombinedProperties}" 
+                              Margin="5">
+
+                              <DataGrid.Columns>
+                                <DataGridTextColumn Header="순서" Binding="{Binding Order}" Width="80" />
+                                <DataGridTextColumn Header="레벨" Binding="{Binding Level}" Width="80" />
+                                <DataGridTextColumn Header="부품명" Binding="{Binding PartName}" Width="80" />
+                                <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
+                                <DataGridTextColumn Header="설정명" Binding="{Binding SettingName}" Width="80" />
+
+                                <!-- 속성 유형을 표시하는 컬럼 추가 -->
+                                <DataGridTextColumn Header="속성 유형" Binding="{Binding PropertyType}" Width="120" />
+                                <DataGridTextColumn Header="Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
+            
+
+            <!--
+            <ScrollViewer Margin="5" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Auto">
+
                 <DataGrid x:Name="ExcelGrid" 
-                          AutoGenerateColumns="False" 
-                          HeadersVisibility="All" 
-                          CanUserAddRows="False"
-                          IsReadOnly="False" 
-                          GridLinesVisibility="All"
-                          RowHeaderWidth="0" 
-                          AlternatingRowBackground="LightGray"
-                          SelectionMode="Extended" 
-                          SelectionUnit="CellOrRowHeader"
-                          ItemsSource="{Binding  CustomProperties}"
-                          Margin="5">
-                          <!--ItemsSource="{Binding MainExcels}"-->
-                    
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="순서" Binding="{Binding Order}" Width="80" /> 
-                        <DataGridTextColumn Header="레벨" Binding="{Binding Level}" Width="80" />
-                        <DataGridTextColumn Header="-" Binding="{Binding Hyphen}" Width="80" />
-                        <DataGridTextColumn Header="부품명" Binding="{Binding PartName}" Width="80" />
-                        <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
-                        <DataGridTextColumn Header="설정명" Binding="{Binding SettingName}" Width="80" />
+                  AutoGenerateColumns="False" 
+                  HeadersVisibility="All" 
+                  CanUserAddRows="False"
+                  IsReadOnly="False" 
+                  GridLinesVisibility="All"
+                  RowHeaderWidth="0" 
+                  AlternatingRowBackground="LightGray"
+                  SelectionMode="Extended" 
+                  SelectionUnit="CellOrRowHeader"
+                  ItemsSource="{Binding  CustomProperties}"
+                  Margin="5" >
 
-                        <DataGridTextColumn Header="PARTNAME" Binding="{Binding PARTNAME}" />
-                        <DataGridTextColumn Header="SPEC" Binding="{Binding SPEC}" />
-                        <DataGridTextColumn Header="MATERIAL" Binding="{Binding MATERIAL}" />
-                        <DataGridTextColumn Header="DESIGNED" Binding="{Binding DESIGNED}" />
-                        <DataGridTextColumn Header="WEIGHT" Binding="{Binding WEIGHT}" />
-                        <DataGridTextColumn Header="FINISH/MAKER" Binding="{Binding FINISHMAKER}" />
-                        <DataGridTextColumn Header="CHECKED" Binding="{Binding CHECKED}" />
-                        <DataGridTextColumn Header="APPROVED" Binding="{Binding APPROVED}" />
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="순서" Binding="{Binding Order}" Width="80" />
+                    <DataGridTextColumn Header="레벨" Binding="{Binding Level}" Width="80" />
+                    <DataGridTextColumn Header="-" Binding="{Binding Hyphen}" Width="80" />
+                    <DataGridTextColumn Header="부품명" Binding="{Binding PartName}" Width="80" />
+                    <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
+                    <DataGridTextColumn Header="설정명" Binding="{Binding SettingName}" Width="80" />
 
-
-                        <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-                    </DataGrid.Columns>
+                    <DataGridTextColumn Header="PARTNAME" Binding="{Binding PARTNAME}" />
+                    <DataGridTextColumn Header="SPEC" Binding="{Binding SPEC}" />
+                    <DataGridTextColumn Header="MATERIAL" Binding="{Binding MATERIAL}" />
+                    <DataGridTextColumn Header="DESIGNED" Binding="{Binding DESIGNED}" />
+                    <DataGridTextColumn Header="WEIGHT" Binding="{Binding WEIGHT}" />
+                    <DataGridTextColumn Header="FINISH/MAKER" Binding="{Binding FINISHMAKER}" />
+                    <DataGridTextColumn Header="CHECKED" Binding="{Binding CHECKED}" />
+                    <DataGridTextColumn Header="APPROVED" Binding="{Binding APPROVED}" />
 
 
-                   
+                    <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <!--<DataGrid ItemsSource="{Binding CustomProperties}">
-                        <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-                    </DataGrid>
+                    <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                </DataGrid.Columns>
 
-                    <DataGrid ItemsSource="{Binding ConfigurationProperties}">
-                        <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-                    </DataGrid>-->
 
+
+                
+                <DataGrid ItemsSource="{Binding CustomProperties}">
+                    <DataGridTextColumn Header="Custom Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
                 </DataGrid>
 
-
-
-
+                <DataGrid ItemsSource="{Binding ConfigurationProperties}">
+                     <DataGridTextColumn Header="Configuration Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />
+                     <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                 </DataGrid>
                 
+                </DataGrid>
                 
-
             </ScrollViewer>
+             -->
+            
+            
+
             
         </Grid>
     </Grid>

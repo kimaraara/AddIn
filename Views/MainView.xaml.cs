@@ -29,11 +29,17 @@ namespace AddIn.Views
         public MainView()
         {
             InitializeComponent();
-            DataContext = new MD_MainExcel();
+            DataContext = new VM_MainFunctionExcel2();
         }
 
-        
-
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (VM_MainFunctionExcel2)this.DataContext;
+            if (viewModel != null)
+            {
+                viewModel.LoadData();
+            }
+        }
 
         // 기본기능 버튼 클릭
         private void btnBasicFunction_Click(object sender, RoutedEventArgs e)
