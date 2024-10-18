@@ -129,19 +129,38 @@
                 <Popup x:Name="SearchPopup" StaysOpen="False" Closed="SearchPopup_Closed"
                        Placement="Bottom" PlacementTarget="{Binding ElementName=ExcelGrid}" 
                         IsOpen="False">
+                    
                     <Border BorderBrush="Gray" BorderThickness="1" Background="White">
                         <StackPanel>
+                            <ListBox>
+                                <ListBoxItem>정렬 A-Z</ListBoxItem>
+                                <ListBoxItem>정렬 Z-A</ListBoxItem>
+                                <ListBoxItem>색상별로 정렬</ListBoxItem>
+                                <ListBoxItem>%에서 필터 지우기(C)</ListBoxItem>
+                                <ListBoxItem>색으로 필터링(I)</ListBoxItem>
+                                <ListBoxItem>텍스트 필터(E)</ListBoxItem>
+                            </ListBox>
+                            
+                            <!-- 검색 텍스트 박스 -->
                             <TextBox Width="200" Height="30" Text="검색"
                                     Foreground="Gray"
                                     GotFocus="TextBox_GotFocus" 
                                     LostFocus="TextBox_LostFocus"/>
-                            <ListBox>
-                                <ListBoxItem>옵션 1</ListBoxItem>
-                                <ListBoxItem>옵션 2</ListBoxItem>
-                                <ListBoxItem>옵션 3</ListBoxItem>
+
+                            <!-- 체크박스 파일 목록 -->
+                            <ListBox ItemsSource="{Binding FilteredFileNames}" SelectionMode="Multiple">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
                             </ListBox>
-                            <Button Content="확인" Click="ConfirmButton_Click"/>
-                            <Button Content="취소" Click="CancelButton_Click"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+                                <Button Content="확인" Click="ConfirmButton_Click" Margin="5"/>
+                                <Button Content="취소" Click="CancelButton_Click" Margin="5"/>
+                            </StackPanel>
+
                         </StackPanel>
                     </Border>
                 </Popup>

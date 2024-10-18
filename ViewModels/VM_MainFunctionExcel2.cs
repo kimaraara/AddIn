@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -35,6 +36,21 @@ namespace AddIn.ViewModels
 
             // SolidWorks 속성 불러오기
             GetProperties();
+
+            // 검색 버튼 눌렀을 때 팝업창에 조회되는 파일 목록 (10/18)
+            // 실제 파일명 로드 예시 (예: 디렉토리에서 파일 목록을 가져오는 방식)
+            string directoryPath = @"C:\Path\To\Your\Files";
+            var fileNames = Directory.GetFiles(directoryPath, "*.sldprt") // SolidWorks 부품 파일만 예시로
+                                     .Select(Path.GetFileNameWithoutExtension)
+                                     .ToList();
+
+            foreach (var fileName in fileNames)
+            {
+                _fileNames.Add(fileName);  // 실제 파일명 추가
+            }
+
+            // 초기 필터링 (파일명에 대한 필터링)
+            FilterFileNames();
         }
 
 
@@ -208,51 +224,69 @@ namespace AddIn.ViewModels
             GetProperties(); // 속성 새로고침
         }
 
-        // 10/18 추가
-        /*
-        private string _searchTerm;
-        public string SearchTerm
+        // 검색 버튼 눌렀을 때 팝업창에 조회되는 파일 목록 (10/18)
+        private string _searchQuery;
+        public string SearchQuery
         {
-            get => _searchTerm;
+            get { return _searchQuery; }
             set
             {
-                if (_searchTerm != value)
+                if (_searchQuery != value)
                 {
-                    _searchTerm = value;
-                    OnPropertyChanged();
-                    // 검색어가 변경될 때마다 필터링
-                    FilterProperties(_searchTerm);
+                    _searchQuery = value;
+                    OnPropertyChanged(); // INotifyPropertyChanged 사용 시
                 }
             }
         }
 
-        
-        public void FilterProperties(string searchTerm)
+        private ObservableCollection<string> _fileNames = new ObservableCollection<string>();
+        private ObservableCollection<string> _filteredFileNames = new ObservableCollection<string>();
+
+        private string _propertyName;
+        public string PropertyName
         {
-            if (string.IsNullOrEmpty(searchTerm))
+            get => _propertyName;
+            set
             {
-                // 검색어가 비어 있으면 모든 항목을 표시
-                CombinedProperties = new ObservableCollection<MD_PropertyItem>(CustomProperties.Concat(ConfigurationProperties));
+                if (_propertyName != value)
+                {
+                    _propertyName = value;
+                    OnPropertyChanged(nameof(PropertyName));  // PropertyChanged 이벤트 호출
+                }
+            }
+        }
+
+        public ObservableCollection<string> FilteredFileNames
+        {
+            get => _filteredFileNames;
+            set
+            {
+                if (_filteredFileNames != value)
+                {
+                    _filteredFileNames = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // 검색어에 맞게 파일명 필터링 (10/18 Contains 오류)
+        private void FilterFileNames()
+        {
+            if (string.IsNullOrEmpty(SearchQuery))
+            {
+                FilteredFileNames = new ObservableCollection<string>(_fileNames);
             }
             else
             {
-                // 검색어에 맞는 항목만 표시
-                var filteredProperties = CustomProperties
-                    .Where(p => (p.Name?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                                (p.Value?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false))
-                    .Concat(ConfigurationProperties.Where(p => (p.Name?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                                                               (p.Value?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)))
-                    .ToList();
-
-                CombinedProperties = new ObservableCollection<MD_PropertyItem>(filteredProperties);
+                FilteredFileNames = new ObservableCollection<string>(_fileNames.Where(f => f.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)));
             }
         }
 
-        public void OnSearchButtonClick()
-        {
-            FilterProperties(SearchTerm);  // 검색어를 기반으로 필터링
-        }
-        */
+
+
+
+
+
 
         // public event PropertyChangedEventHandler PropertyChanged;
 
