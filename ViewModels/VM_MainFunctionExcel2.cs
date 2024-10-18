@@ -1,4 +1,5 @@
 ﻿using AddIn.Models;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using SolidWorks.Interop.sldworks;
 using System;
@@ -195,6 +196,63 @@ namespace AddIn.ViewModels
                 FileName = "열린 파일이 없습니다.";
             }
         }
+
+        // 새로고침 메서드
+        public void RefreshData()
+        {
+            CustomProperties.Clear();
+            ConfigurationProperties.Clear();
+            CombinedProperties.Clear();
+
+            // SolidWorks에서 최신 속성값을 가져오는 로직 추가
+            GetProperties(); // 속성 새로고침
+        }
+
+        // 10/18 추가
+        /*
+        private string _searchTerm;
+        public string SearchTerm
+        {
+            get => _searchTerm;
+            set
+            {
+                if (_searchTerm != value)
+                {
+                    _searchTerm = value;
+                    OnPropertyChanged();
+                    // 검색어가 변경될 때마다 필터링
+                    FilterProperties(_searchTerm);
+                }
+            }
+        }
+
+        
+        public void FilterProperties(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                // 검색어가 비어 있으면 모든 항목을 표시
+                CombinedProperties = new ObservableCollection<MD_PropertyItem>(CustomProperties.Concat(ConfigurationProperties));
+            }
+            else
+            {
+                // 검색어에 맞는 항목만 표시
+                var filteredProperties = CustomProperties
+                    .Where(p => (p.Name?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                                (p.Value?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false))
+                    .Concat(ConfigurationProperties.Where(p => (p.Name?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                                                               (p.Value?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)))
+                    .ToList();
+
+                CombinedProperties = new ObservableCollection<MD_PropertyItem>(filteredProperties);
+            }
+        }
+
+        public void OnSearchButtonClick()
+        {
+            FilterProperties(SearchTerm);  // 검색어를 기반으로 필터링
+        }
+        */
 
         // public event PropertyChangedEventHandler PropertyChanged;
 

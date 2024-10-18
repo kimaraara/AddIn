@@ -43,10 +43,11 @@ namespace AddIn.Views
             }
         }
 
-
+        /*
         internal void Show()
         {
             throw new NotImplementedException();
         }
+        */
     }
 }

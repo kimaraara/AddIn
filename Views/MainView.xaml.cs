@@ -7,7 +7,11 @@ using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
 using System.Windows.Controls;
-using ClosedXML.Excel; // 이게 없으면 SaveFileDialog 가 오류남 ㅠ
+using ClosedXML.Excel;
+using TextBox = System.Windows.Controls.TextBox;
+using System.Windows.Media;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System.Linq; // 이게 없으면 SaveFileDialog 가 오류남 ㅠ
 
 namespace AddIn.Views
 {
@@ -123,8 +127,8 @@ namespace AddIn.Views
             }
         }
         
+        // 새로고침 (넣어야 하나?)
 
-        // 새로고침
 
 
 
@@ -147,11 +151,81 @@ namespace AddIn.Views
         // 검색 버튼 클릭
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            SearchView searchView = new SearchView();
-            searchView.ShowDialog();
+            // SearchView searchView = new SearchView();
+            // searchView.ShowDialog();
+
+            // 엑셀 그리드에 빈 행 추가
+            var newRow = new Models.MD_PropertyItem
+            {
+                Order = 0, // 순서 초기값 설정
+                Level = 0, // 레벨 초기값 설정
+                PartName = string.Empty, // 빈 부품명
+                Quantity = 0, // 수량 초기값
+                SettingName = string.Empty, // 설정명 초기값
+                PropertyType = string.Empty, // 속성 유형 초기값
+                Name = string.Empty, // 속성명
+                Value = string.Empty // 값
+            };
+
+            // 현재 바인딩 된 컬렉션에 새 행 추가
+            var viewModel = (VM_MainFunctionExcel2)this.DataContext;
+            viewModel.CombinedProperties.Insert(0, newRow); // 첫 번째 행에 빈 셀 추가
+
+            // 검색 팝업 띄우기
+            SearchPopup.IsOpen = true;
         }
 
-        
+        // 팝업 창이 닫힐 때 실행
+        private void SearchPopup_Closed(object sender, EventArgs e)
+        {
+            // 검색 결과가 없을 때나 팝업이 닫히면 추가된 빈 셀을 제거
+            var viewModel = (VM_MainFunctionExcel2)this.DataContext;
+
+            // 빈 셀을 추가된 상태로 리스트에서 찾고 제거
+            var firstRow = viewModel.CombinedProperties.FirstOrDefault(row => row.Name == string.Empty && row.Value == string.Empty);
+            if (firstRow != null)
+            {
+                viewModel.CombinedProperties.Remove(firstRow); // 해당 셀 삭제
+            }
+        }
+
+        // "검색" 텍스트 기본, 입력할 때 검색 제거
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox.Text == "검색")
+            {
+                textBox.Text = "";
+                textBox.Foreground = Brushes.Black;
+            }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                textBox.Text = "검색";
+                textBox.Foreground = Brushes.Gray;
+            }
+        }
+
+
+        // 검색 팝업창에서 확인 버튼 눌렀을 때
+        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 선택된 내용을 처리한 후 팝업을 닫음
+            SearchPopup.IsOpen = false;
+        }
+
+        // 검색 팝업창에서 취소 버튼 눌렀을 때
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 선택된 내용을 처리한 후 팝업을 닫음
+            SearchPopup.IsOpen = false;
+        }
+
+       
     }
 
 }
