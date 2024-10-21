@@ -127,7 +127,7 @@
                 
                 <!-- 팝업 컨트롤 추가(검색 버튼을 눌렀을 때 엑셀 그리드 창에 팝업 -->
                 <Popup x:Name="SearchPopup" StaysOpen="False" Closed="SearchPopup_Closed"
-                       Placement="Bottom" PlacementTarget="{Binding ElementName=ExcelGrid}" 
+                       Placement="Top" PlacementTarget="{Binding ElementName=ExcelGrid}" 
                         IsOpen="False">
                     
                     <Border BorderBrush="Gray" BorderThickness="1" Background="White">
@@ -206,7 +206,7 @@
                                 <DataGridTextColumn Header="부품명" Binding="{Binding PartName}" Width="80" />
                                 <DataGridTextColumn Header="수량" Binding="{Binding Quantity}" Width="80" />
                                 <DataGridTextColumn Header="설정명" Binding="{Binding SettingName}" Width="80" />
-
+                                
                                 <!-- 속성 유형을 표시하는 컬럼 추가 -->
                                 <DataGridTextColumn Header="속성 유형" Binding="{Binding PropertyType}" Width="120" />
                                 <DataGridTextColumn Header="Property Name" Binding="{Binding Name}" Width="80" IsReadOnly="True" />

@@ -23,7 +23,6 @@ namespace AddIn.ViewModels
         private ObservableCollection<MD_PropertyItem> _combinedProperties; // 통합된 속성
         public ObservableCollection<MD_PropertyItem> Properties { get; set; }
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public VM_MainFunctionExcel2()
@@ -33,13 +32,16 @@ namespace AddIn.ViewModels
             ConfigurationProperties = new ObservableCollection<MD_PropertyItem>();
             CombinedProperties = new ObservableCollection<MD_PropertyItem>(); // 통합된 속성 
             Properties = new ObservableCollection<MD_PropertyItem>();
-
+           
             // SolidWorks 속성 불러오기
             GetProperties();
+            
 
             // 검색 버튼 눌렀을 때 팝업창에 조회되는 파일 목록 (10/18)
             // 실제 파일명 로드 예시 (예: 디렉토리에서 파일 목록을 가져오는 방식)
-            string directoryPath = @"C:\Path\To\Your\Files";
+            string directoryPath = @"C: \Users\YOUNG\Desktop\공유받은 개발 자료\솔리드 웍스";
+            // C:\Path\To\Your\Files <-- 10/21 잘 되다가 갑자기 오류남
+
             var fileNames = Directory.GetFiles(directoryPath, "*.sldprt") // SolidWorks 부품 파일만 예시로
                                      .Select(Path.GetFileNameWithoutExtension)
                                      .ToList();
@@ -50,9 +52,8 @@ namespace AddIn.ViewModels
             }
 
             // 초기 필터링 (파일명에 대한 필터링)
-            FilterFileNames();
+           FilterFileNames();
         }
-
 
         public string FileName
         {
@@ -108,6 +109,7 @@ namespace AddIn.ViewModels
                 }
             }
         }
+       
 
         // 속성 변경 알림
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -269,7 +271,8 @@ namespace AddIn.ViewModels
             }
         }
 
-        // 검색어에 맞게 파일명 필터링 (10/18 Contains 오류)
+        
+        // 검색어에 맞게 파일명 필터링 (10/18 Contains 오류 -> IndexOf 변경)
         private void FilterFileNames()
         {
             if (string.IsNullOrEmpty(SearchQuery))
@@ -278,12 +281,9 @@ namespace AddIn.ViewModels
             }
             else
             {
-                FilteredFileNames = new ObservableCollection<string>(_fileNames.Where(f => f.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)));
+                FilteredFileNames = new ObservableCollection<string>(_fileNames.Where(f => f.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0));
             }
         }
-
-
-
 
 
 
