@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace AddIn.Models
 {
-    internal class Relay_Command : ICommand
+    public class Relay_Command : ICommand
     {
-        private readonly Action _execute;
+        private readonly Action<object> _execute; // Action<object>로 수정하여 파라미터를 받을 수 있도록
         private readonly Func<bool> _canExecute;
 
-        public Relay_Command(Action execute, Func<bool> canExecute = null)
+        public Relay_Command(Action<object> execute, Func<bool> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -23,9 +23,9 @@ namespace AddIn.Models
             return _canExecute == null || _canExecute();
         }
 
-        public void Execute(object parameter) 
+        public void Execute(object parameter)
         {
-            _execute();
+            _execute(parameter); // Execute 메서드에서 파라미터를 사용하도록 수정
         }
 
         public event EventHandler CanExecuteChanged

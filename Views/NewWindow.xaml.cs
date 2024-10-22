@@ -25,6 +25,9 @@ namespace AddIn.Views
         public NewWindow()
         {
             InitializeComponent();
+
+            // ViewModel을 명시적으로 생성하여 DataContext에 설정
+            DataContext = new VM_NewWindow(); 
         }
 
         // 시작 버튼 클릭
@@ -33,7 +36,7 @@ namespace AddIn.Views
             // EW_MainFunction ew_MainFunction = new EW_MainFunction();
             // ew_MainFunction.Show();
 
-            // ViewModel 호출
+            // VM_MainFunctionExcel2 호출
             var viewModel = this.DataContext as VM_MainFunctionExcel2;
 
 

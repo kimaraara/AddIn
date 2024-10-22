@@ -55,7 +55,9 @@
                     VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"  Height="30" Grid.ColumnSpan="2" />
 
             <!-- btnMainFunction / btnMainFunction_Click -->
-            <Button x:Name="btnMainView" Click="btnMainView_Click" 
+            <!-- Click="btnMainView_Click" -->
+            <Button x:Name="btnMainView" 
+                    Command="{Binding ExampleCommand}"
                     FontSize="30" FontWeight="Heavy"
                     HorizontalAlignment="Left" VerticalAlignment="Top" 
                     Height="91" Width="183" Background="MintCream" BorderBrush="LightGray" 
@@ -68,7 +70,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     
-                    <TextBlock Grid.Column="0" Text=" 시작" Margin="0 5 15 20"/>
+                    <TextBlock Grid.Column="0" Text=" 시작" 
+                               Margin="0 5 15 20"/>
                     <fa:ImageAwesome x:Name="icoStartMenu" Icon="HandPointerOutline" 
                                      Width="25" Height="25" VerticalAlignment="Center" Margin="0 50 0 10" />
 
@@ -89,11 +92,13 @@
 
             <!--라디오 버튼 필수 선택-->
             <RadioButton x:Name="btnCustomProperties" Content="사용자 정의" 
-                         IsChecked="{Binding IsCustomPropertySelected}"
+                         GroupName="PropertiesGroup"
+                         IsChecked="{Binding IsCustomPropertySelected}" 
                          Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="20" Width="183" 
-                         Margin="109,2,0,0" Grid.Row="1" VerticalAlignment="Top" />
-            
+                        Margin="109,2,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+
             <RadioButton x:Name="btnSettingProperties" Content="설정 속성" 
+                         GroupName="PropertiesGroup"
                          IsChecked="{Binding IsConfigurationPropertySelected}"
                          Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="20" Width="183" 
                          Margin="109,25,0,0" Grid.Row="1" VerticalAlignment="Top" />
@@ -103,7 +108,7 @@
                       Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="17" Width="183" 
                       Margin="109,50,0,0" Grid.Row="1" VerticalAlignment="Top" />
 
-
+    
 
         </Grid>
     </Viewbox>
