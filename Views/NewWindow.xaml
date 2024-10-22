@@ -7,9 +7,38 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              Height="800" Width="1000">
 
-    <Viewbox Stretch="Uniform">
-        <Grid Background="#FFFDFFE7" Height="419" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.945">
+    <!-- 둥근 버튼 스타일 정의 -->
+    <UserControl.Resources>
+        <!-- 버튼 그림자 효과 정의 -->
+        <DropShadowEffect x:Key="ShadowEffect"
+                  ShadowDepth="5"
+                  Color="Gray"
+                  Direction="320"
+                  BlurRadius="10"
+                  Opacity="0.5"/>
 
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="4" 
+                                CornerRadius="25"
+                                Effect="{StaticResource ShadowEffect}" >
+                            <!-- 둥근 모서리 설정 -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+
+    <Viewbox Stretch="Uniform">
+        <Grid Background="WhiteSmoke" Height="419" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.945">
+            <!-- FFFCE5C4 FFFDFFE7 -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="200" />
                 <RowDefinition Height="*" />
@@ -22,19 +51,23 @@
 
 
             <TextBlock 
-                    Grid.Row="1" Text="서브 기능" FontSize="18" Margin="160,82,0,0" Background="LightGoldenrodYellow"
+                    Grid.Row="1" Text="서브 기능" FontSize="18" Margin="160,82,0,0" Background="LightGray"
                     VerticalAlignment="Top" HorizontalAlignment="Left" Width="80"  Height="30" Grid.ColumnSpan="2" />
 
             <!-- btnMainFunction / btnMainFunction_Click -->
             <Button x:Name="btnMainView" Click="btnMainView_Click" 
                     FontSize="30" FontWeight="Heavy"
                     HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Height="91" Width="183" Background="#FFFFFDA2" Margin="109,72,0,0" Grid.ColumnSpan="2">
+                    Height="91" Width="183" Background="MintCream" BorderBrush="LightGray" 
+                    Margin="109,72,0,0" Grid.ColumnSpan="2"
+                    Style="{StaticResource RoundedButtonStyle}" >
+                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    
                     <TextBlock Grid.Column="0" Text=" 시작" Margin="0 5 15 20"/>
                     <fa:ImageAwesome x:Name="icoStartMenu" Icon="HandPointerOutline" 
                                      Width="25" Height="25" VerticalAlignment="Center" Margin="0 50 0 10" />
@@ -44,17 +77,35 @@
 
             <Button Content="부품 분리" x:Name="btnPartSeparate" Click="btnPartSeparate_Click"
                     HorizontalAlignment="Center" VerticalAlignment="Top" 
-                    Height="58" Width="124" Background="#FFFFFDA2" Grid.Row="1" Margin="0,126,0,0" />
+                    Height="58" Width="124" Background="MintCream" BorderBrush="LightGray"
+                    Grid.Row="1" Margin="0,126,0,0" 
+                    Style="{StaticResource RoundedButtonStyle}" />
 
             <Button Grid.Column="1" Content="부품 이름 변경" x:Name="btnPartNameChange" Click="btnPartNameChange_Click"
                     HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Height="58" Width="124" Background="#FFFFFDA2" Margin="36,126,0,0" Grid.Row="1" />
-            <RadioButton Content="사용자 정의" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="20" Margin="109,2,0,0" Grid.Row="1" VerticalAlignment="Top" Width="183"/>
-            <RadioButton Content="설정 특성" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="20" Margin="109,25,0,0" Grid.Row="1" VerticalAlignment="Top" Width="183"/>
-            <CheckBox Content="BOM 구조로 불러오기" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="17" Margin="109,50,0,0" Grid.Row="1" VerticalAlignment="Top" Width="183"/>
+                    Height="58" Width="124" Background="MintCream" BorderBrush="LightGray"
+                    Margin="36,126,0,0" Grid.Row="1" 
+                    Style="{StaticResource RoundedButtonStyle}" />
+
+            <!--라디오 버튼 필수 선택-->
+            <RadioButton x:Name="btnCustomProperties" Content="사용자 정의" 
+                         IsChecked="{Binding IsCustomPropertySelected}"
+                         Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="20" Width="183" 
+                         Margin="109,2,0,0" Grid.Row="1" VerticalAlignment="Top" />
+            
+            <RadioButton x:Name="btnSettingProperties" Content="설정 속성" 
+                         IsChecked="{Binding IsConfigurationPropertySelected}"
+                         Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="20" Width="183" 
+                         Margin="109,25,0,0" Grid.Row="1" VerticalAlignment="Top" />
+
+            <!--체크박스-->
+            <CheckBox Content="BOM 구조로 불러오기" 
+                      Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="17" Width="183" 
+                      Margin="109,50,0,0" Grid.Row="1" VerticalAlignment="Top" />
 
 
 
         </Grid>
     </Viewbox>
+    
 </UserControl>

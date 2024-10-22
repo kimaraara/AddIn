@@ -25,6 +25,160 @@ namespace AddIn.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        // NewWindow 시작 버튼 누르기 전 라디오 버튼 선택 (10/21 오후)
+        // private bool _isCustomPropertySelected = true; // 기본값으로 사용자 정의 속성 선택
+        // private bool _isConfigurationPropertySelected; // 설정 속성 선택
+
+        private bool isCustomPropertySelected = true; // 기본값으로 사용자 정의 속성 선택
+        public bool IsCustomPropertySelected
+        {
+            get => isCustomPropertySelected;
+            set
+            {
+                isCustomPropertySelected = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool isConfigurationPropertySelected;
+        public bool IsConfigurationPropertySelected
+        {
+            get => isConfigurationPropertySelected;
+            set
+            {
+                isConfigurationPropertySelected = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // 사용자 정의 속성 가져오기
+        public void LoadCustomProperties()
+        {
+            try
+            {
+                // 사용자 정의 속성 가져오기
+                // 사용자 정의 속성 초기화
+                CustomProperties.Clear();
+
+                // SolidWorks 인스턴스 가져오기
+                SldWorks swApp = Marshal.GetActiveObject("SldWorks.Application") as SldWorks;
+                ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+
+                if (swModel != null)
+                {
+                    // 사용자 정의 속성 관리자 가져오기
+                    CustomPropertyManager customPropMgr = swModel.Extension.CustomPropertyManager[""];
+                    string[] customPropNames = customPropMgr.GetNames();
+
+                    // 사용자 정의 속성을 반복하여 가져오기
+                    if (customPropNames != null)
+                    {
+                        foreach (var propName in customPropNames)
+                        {
+                            string valOut, resolvedValOut;
+                            customPropMgr.Get2(propName, out valOut, out resolvedValOut);
+
+                            // 사용자 정의 속성을 ObservableCollection에 추가
+                            CustomProperties.Add(new MD_PropertyItem
+                            {
+                                Name = propName,
+                                Value = resolvedValOut,
+                                IsCustomProperty = true
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    FileName = "열린 파일이 없습니다.";
+                }
+            }
+            catch (COMException ex)
+            {
+                FileName = $"SolidWorks 오류: {ex.Message}";
+            }
+        }
+
+        // 설정 속성 가져오기
+        public void LoadSettingProperties()
+        {
+            // 설정 속성을 가져오기
+            // 설정 속성 초기화
+            ConfigurationProperties.Clear();
+
+            // SolidWorks 인스턴스 가져오기
+            SldWorks swApp = Marshal.GetActiveObject("SldWorks.Application") as SldWorks;
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+
+            if (swModel != null)
+            {
+                // 설정 속성 관리자 가져오기
+                ConfigurationManager configMgr = swModel.ConfigurationManager;
+                Configuration config = configMgr.ActiveConfiguration;
+                CustomPropertyManager configPropMgr = config.CustomPropertyManager;
+                string[] configPropNames = configPropMgr.GetNames();
+
+                // 설정 속성을 반복하여 가져오기
+                if (configPropNames != null)
+                {
+                    foreach (var propName in configPropNames)
+                    {
+                        string valOut, resolvedValOut;
+                        configPropMgr.Get2(propName, out valOut, out resolvedValOut);
+
+                        // 설정 속성을 ObservableCollection에 추가
+                        ConfigurationProperties.Add(new MD_PropertyItem
+                        {
+                            Name = propName,
+                            Value = resolvedValOut,
+                            IsCustomProperty = false,
+                            PropertyType = "설정 속성" // 속성 유형 추가
+                        });
+                    }
+                }
+            }
+            else
+            {
+                FileName = "열린 파일이 없습니다.";
+            }
+        }
+
+
+
+
+        // 시작 버튼 클릭 이벤트 처리
+        public void OnStartButtonClick()
+        {
+            // ExcelGrid에 표시할 정보 초기화
+            Properties.Clear();
+
+            // 사용자 정의 속성 및 설정 속성 로드
+            LoadCustomProperties();
+            LoadSettingProperties();
+
+            if (IsCustomPropertySelected)
+            {
+                foreach (var prop in CustomProperties)
+                {
+                    Properties.Add(prop); // 사용자 정의 속성을 추가
+                }
+            }
+            else if (IsConfigurationPropertySelected)
+            {
+                foreach (var prop in ConfigurationProperties)
+                {
+                    Properties.Add(prop); // 설정 속성을 추가
+                }
+            }
+            else
+            {
+                FileName = "속성이 선택되지 않았습니다.";
+            }
+        }
+
+
+
+
         public VM_MainFunctionExcel2()
         {
             // 속성 초기화
@@ -215,6 +369,7 @@ namespace AddIn.ViewModels
             }
         }
 
+        /*
         // 새로고침 메서드
         public void RefreshData()
         {
@@ -225,6 +380,7 @@ namespace AddIn.ViewModels
             // SolidWorks에서 최신 속성값을 가져오는 로직 추가
             GetProperties(); // 속성 새로고침
         }
+        */
 
         // 검색 버튼 눌렀을 때 팝업창에 조회되는 파일 목록 (10/18)
         private string _searchQuery;

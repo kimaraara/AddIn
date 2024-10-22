@@ -22,7 +22,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="75"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="DarkGray" />
+        <Border Grid.Row="0" Background="WhiteSmoke" />
 
 
         <Grid Grid.Row="1">
